@@ -1,8 +1,12 @@
 import random
 from turtle import Turtle
-FOOD_POSITIONS = [-260, -240, -220, -200, -180, -160, -140, -120, -100, -80, -60, -40,
-                  -20, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
+from gameconfig import SCREEN_WIDTH, SCREEN_HEIGHT
 
+range_x = (int((SCREEN_WIDTH - 40)/2 * -1), int((SCREEN_WIDTH - 40)/2))
+range_y = (int((SCREEN_HEIGHT - 40)/2 * -1), int((SCREEN_HEIGHT - 40)/2))
+
+FOOD_X_POSITIONS = list(range(range_x[0], range_x[1], 20))
+FOOD_Y_POSITIONS = list(range(range_y[0], range_y[1], 20))
 
 class Food(Turtle):
     
@@ -16,8 +20,11 @@ class Food(Turtle):
         self.refresh()
 
     def refresh(self, snake=()):
-        random_pos = tuple(random.choices(FOOD_POSITIONS, k=2))
-        if random_pos in [part.pos() for part in snake]:
+        random_x = random.choice(FOOD_X_POSITIONS)
+        random_y = random.choice(FOOD_Y_POSITIONS)
+        random_pos = tuple((random_x, random_y))
+        if random_pos[0] in [part.xcor for part in snake]\
+                and random_pos[1] in [part.ycor for part in snake]:
             return self.refresh(snake)
         else:
             self.goto(random_pos)

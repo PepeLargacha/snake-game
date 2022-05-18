@@ -1,27 +1,43 @@
 from turtle import Turtle
-ALIGNMENT = "center"
-FONT = ("Courier", 12, "normal")
+from gameconfig import SCREEN_HEIGHT, ALIGNMENT, FONT
+
 
 class ScoreBoard(Turtle):
 
     def __init__(self):
         super().__init__()
         self.score = 0
+        self.high_score = 0
         self.speed("fastest")
-        self.pencolor("white")
+        self.pencolor("red")
         self.hideturtle()
         self.penup()
-        self.goto(-20, 270)
-        self.draw_score()
+        self.get_highscore()
 
     def increment_score(self):
-        self.clear()
         self.score += 10
         self.draw_score()
 
     def draw_score(self):
-        self.write(f'Score: {self.score}', align=ALIGNMENT, font=FONT)
+        self.clear()
+        self.goto(0, SCREEN_HEIGHT / 2 - 20)
+        self.write(f'Score: {self.score}     High Score: {self.high_score}', align=ALIGNMENT, font=FONT)
+
+    def reset_scoreboard(self):
+        if self.score > self.high_score:
+            self.high_score = self.score
+            with open("log.txt", mode='w') as file:
+                file.write(f"{self.high_score}")
+        self.score = 0
+        self.draw_score()
 
     def game_over(self):
         self.goto(0, 0)
         self.write("GAME OVER", align=ALIGNMENT, font=FONT)
+        self.goto(0, -30)
+        self.write("Press 'N' to play again.", align=ALIGNMENT, font=FONT)
+
+    def get_highscore(self):
+        with open("log.txt") as file:
+            high_score = int(file.read())
+            self.high_score = high_score

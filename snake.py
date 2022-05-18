@@ -8,27 +8,34 @@ RIGHT = 0
 LEFT = 180
 
 
-class Snake(Turtle):
+class Snake:
+
     def __init__(self):
-        super().__init__()
         self.snake_parts = []
+        self.head = None
         self.create_snake()
-        self.head = self.snake_parts[0]
 
     def create_snake(self):
         for pos in STARTING_POSITIONS:
             self.add_segment(pos)
+            self.head = self.snake_parts[0]
 
     def add_segment(self, position):
-        t = Turtle('square')
-        t.shapesize(stretch_wid=0.9, stretch_len=0.9)
-        t.penup()
-        t.color('white')
-        t.goto(position)
-        self.snake_parts.append((t))
+        part = Turtle('square')
+        part.shapesize(stretch_wid=0.9, stretch_len=0.9)
+        part.penup()
+        part.color('white')
+        part.goto(position)
+        self.snake_parts.append(part)
 
     def extend(self):
         self.add_segment(self.snake_parts[-1].pos())
+
+    def reset_snake(self):
+        for part in self.snake_parts:
+            part.goto(500, 500)
+        self.snake_parts.clear()
+        self.create_snake()
 
     def move(self):
         snake_body_position = list(map(Turtle.pos, self.snake_parts[::-1]))
