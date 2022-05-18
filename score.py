@@ -7,7 +7,6 @@ class ScoreBoard(Turtle):
     def __init__(self):
         super().__init__()
         self.score = 0
-        self.high_score = 0
         self.speed("fastest")
         self.pencolor("red")
         self.hideturtle()
@@ -38,6 +37,9 @@ class ScoreBoard(Turtle):
         self.write("Press 'N' to play again.", align=ALIGNMENT, font=FONT)
 
     def get_highscore(self):
-        with open("log.txt") as file:
-            high_score = int(file.read())
-            self.high_score = high_score
+        try:
+            with open("log.txt") as file:
+                high_score = int(file.read())
+                self.high_score = high_score
+        except:
+            self.high_score = 0
